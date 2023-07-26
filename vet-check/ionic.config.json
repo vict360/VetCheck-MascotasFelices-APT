@@ -1,0 +1,7 @@
+{
+  "name": "Vet Check",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
