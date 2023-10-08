@@ -4,12 +4,28 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
   },
   {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'ficha-mascota/:id',
+    loadChildren: () => import('./pages/ficha-mascota/ficha-mascota.module').then( m => m.FichaMascotaPageModule)
+  },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+  {
+    path: 'historial/:id',
+    loadChildren: () => import('./pages/historial-procedimientos/historial-procedimientos.module').then( m => m.HistorialProcedimientosPageModule)
   },
 ];
 

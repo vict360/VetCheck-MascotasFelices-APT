@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Inicio de sesión</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title class="ion-text-center" size="large">Inicio de sesión</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div>
+
+    <ion-grid class="ion-margin-top">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <div>
+            <ion-img class=""
+            src="../../../assets/img/logo_img.png"
+            alt="">
+            </ion-img>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <form [formGroup]="formLogin">
+            
+            
+            <ion-input #rut_login label="Rut" labelPlacement="floating"
+            formControlName="rut" type=""
+            [maskito]="rutMask"
+            [maskitoElement]="maskRut"
+            [clearInput]="true"
+            fill="outline"></ion-input>
+
+            <div class="error">
+              <p *ngIf="formLogin.get('rut')?.hasError('required') && formLogin.get('rut')?.touched">
+                El campo debe estar completo
+              </p>
+            </div>
+
+            <ion-input #contra_login label="Contraseña" labelPlacement="floating" formControlName="contra"
+            type="password" [clearInput]="true"
+            fill="outline"></ion-input>
+
+            <div class="error">
+              <p *ngIf="formLogin.get('contra')?.hasError('required') && formLogin.get('contra')?.touched">
+                El campo debe estar completo
+              </p>
+            </div>
+          </form>
+          <ion-item lines="none">
+            <ion-label slot="end">
+              <a>
+                <p (click)="olvidada()">¿Olvidaste tu contraseña?</p>
+              </a>
+            </ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-grid class="">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <div class="ion-margin-top">
+            <ion-button [disabled]="!formLogin.valid" shape="round" (click)="inicioDeSesion(rut_login, contra_login)" fill="outline">Iniciar sesión</ion-button> 
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+</ion-content>

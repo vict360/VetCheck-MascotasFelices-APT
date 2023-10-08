@@ -1,0 +1,103 @@
+<ion-content [fullscreen]="true">
+
+
+  <ion-header [style.visibility]="visibilidad">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="cerrarSesion()">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+        <ion-button (click)="abrirPerfil()">
+          <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title class="text-center">Mascotas Felices</ion-title>
+    </ion-toolbar>
+  </ion-header>  
+
+
+<div [style.visibility]="visibilidad">
+
+  <div [style.visibility]="visibilidad">  
+    <ion-grid>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <div>
+            <ion-img
+            src="../../../assets/img/logo_img.png"
+            alt="">
+            </ion-img>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <h5 class="ion-text-center">La última mascota que escanees aparecerá aquí <br>
+      <ion-icon name="arrow-down-outline"></ion-icon>
+    </h5>
+    
+    <div *ngIf="resultadoEscaneado" class="ion-margin-top">
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col>
+            <ion-item button (click)="mostrarUltimaMascota()">
+              <ion-avatar slot="start">
+                <img alt="Silhouette of a person's head" src="{{ultimaMascota.img_masc}}"/>
+              </ion-avatar>
+              <ion-label> {{ultimaMascota.nombre_masc}} </ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+
+  </div>
+</div>
+
+
+<!--
+  ESTOS ELEMENTOS SE ACTIVAN CUANDO SE PRENDE LA CÁMARA
+-->
+  <div class="centrar" [style.visibility]="enEscaneo"> 
+    <div class="center">
+      <div id="icono-camara" class="camara-escaner">
+      </div>  
+    </div>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="center" [style.visibility]="enEscaneo">
+  
+    <ion-fab-button (click)="pararEscaner()">
+      <ion-icon name="stop"></ion-icon>
+    </ion-fab-button>
+
+  </ion-fab>
+
+  <ion-tabs [style.visibility]="visibilidad" class="pd-t">
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button (click)="iniciarEscaneo()">
+        <ion-icon name="qr-code-outline"></ion-icon>
+        Escanear QR
+      </ion-tab-button>
+      <ion-tab-button (click)="buscarCliente()">
+        <ion-icon name="search-outline"></ion-icon>
+        Buscar cliente
+      </ion-tab-button>
+      <ion-tab-button (click)="addMascota()">
+        <ion-icon name="document-outline"></ion-icon>
+        Agregar mascota
+      </ion-tab-button>
+      <ion-tab-button (click)="addCliente()">
+        <ion-icon name="person-add-outline"></ion-icon>
+        Agregar cliente
+      </ion-tab-button>
+      <ion-tab-button (click)="verAgenda()">
+        <ion-icon name="calendar-outline"></ion-icon>
+        Ver agenda
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+
+</ion-content>

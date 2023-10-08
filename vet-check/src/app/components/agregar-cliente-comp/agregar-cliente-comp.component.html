@@ -1,0 +1,148 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Añada a un nuevo cliente</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="center pad-25">
+      <form [formGroup]="form">
+
+        <ion-list>
+          <!--Rut del dueño-->
+          <ion-item>
+            <ion-input #rut_cliente required
+            label="Rut del cliente" minlength="10" maxlength="10" labelPlacement="floating" placeholder="12345678-9"
+            [maskito]="rutMask"
+            [maskitoElement]="maskRut" formControlName="rut"></ion-input>
+          </ion-item>
+          <div class="error">
+            <p *ngIf="form.get('rut')?.hasError('required') && form.get('rut')?.touched">
+              El campo no debe estar vacio
+            </p>
+            <p *ngIf="form.get('rut')?.hasError('minlength')">
+              Ingresa un rut válido
+            </p>
+          </div>
+          <!--Fin rut-->
+          
+          <!--Nombre-->
+          <ion-item>
+              <ion-input #nombre_cliente formControlName="nombre"
+              label="Nombre" minlength="4" maxlength="15"
+              labelPlacement="floating" placeholder="Juan"></ion-input>
+          </ion-item>
+          <div class="error">
+            <p *ngIf="form.get('nombre')?.hasError('required') && form.get('nombre')?.touched">
+              El campo no debe estar vacio
+            </p>
+            <p *ngIf="form.get('nombre')?.hasError('minlength')">
+              Ingresa nombre válido
+            </p>
+          </div>
+          <!--Fin Nombre-->
+
+          <!--Apellido-->
+          <ion-item>
+            <ion-input #apellido_cliente formControlName="apellido"
+            label="Apellido" minlength="4" maxlength="15"
+            labelPlacement="floating" placeholder="Perez"></ion-input>
+          </ion-item>
+          <div class="error">
+            <p *ngIf="form.get('apellido')?.hasError('required') && form.get('apellido')?.touched">
+              El campo no debe estar vacio
+            </p>
+            <p *ngIf="form.get('apellido')?.hasError('minlength')">
+              Ingresa un apellido válido
+            </p>
+          </div>
+          <!--Fin Nombre-->
+
+          <!--Numero telefonico-->
+          <ion-item>
+            <ion-input #numero_telefonico formControlName="tel"
+            label="Número telefónico" minlength="4" maxlength="12"
+            labelPlacement="floating" placeholder="+56912345678" value="+569"
+            [maskito]="telMask"
+            [maskitoElement]="maskTel"
+            ></ion-input>
+          </ion-item>
+          <div class="error">
+            <p *ngIf="form.get('tel')?.hasError('required') && form.get('tel')?.touched">
+              El campo no debe estar vacio
+            </p>
+            <p *ngIf="form.get('tel')?.hasError('minlength')">
+              Ingresa un número télefonico válido
+            </p>
+          </div>
+          <!--Fin Nombre-->
+
+          <!--correo-->
+          <ion-item>
+            <ion-input #correo
+            label="Correo eléctronico" minlength="4" maxlength="25" formControlName="email"
+            labelPlacement="floating" placeholder="correo@gmail.com" type="email"></ion-input>
+          </ion-item>
+          <div class="error">
+            <p *ngIf="form.get('correo')?.hasError('required') && form.get('correo')?.touched">
+              El campo no debe estar vacio
+            </p>
+            <p *ngIf="form.get('correo')?.hasError('email')">
+              Ingresa un correo válido
+            </p>
+          </div>
+          <!--Fin Nombre-->
+
+          <!--Comuna-->
+          <ion-item> 
+              <ion-select #comuna label="Comuna" formControlName="comuna"> 
+                <div *ngFor="let co of comunas">
+                  <ion-select-option value="{{co.id_comuna}}">{{co.nombre_comuna}}</ion-select-option> 
+                </div>
+              </ion-select> 
+          </ion-item>
+          <div class="error">
+            <p *ngIf="form.get('comuna')?.hasError('required') && form.get('comuna')?.touched">
+              El campo no debe estar vacio
+            </p>
+          </div>
+          <!--Fin Nombre-->
+          
+          <!--direccion-->
+          <ion-item>
+            <ion-input #direccion
+            label="Dirección" minlength="4" maxlength="30" formControlName="dir"
+            labelPlacement="floating" placeholder="Las acasias 132"></ion-input>
+          </ion-item>
+          <div class="error">
+            <p *ngIf="form.get('dir')?.hasError('required') && form.get('dir')?.touched">
+              El campo no debe estar vacio
+            </p>
+            <p *ngIf="form.get('dir')?.hasError('minlength')">
+              Ingresa una dirección válida
+            </p>
+          </div>
+          <!--Fin Nombre-->
+        </ion-list>
+
+      </form>
+  </div>
+
+</ion-content>
+
+<!--Footer-->
+<ion-footer>
+  <!--Toolbar con 2 botones-->
+  <ion-toolbar>
+      <ion-title></ion-title>
+      <ion-buttons slot="start">
+          <ion-button color="medium" (click)="cancel()">Cancelar</ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+          <ion-button button-type="submit" [strong]="true" (click)="confirm(rut_cliente, nombre_cliente,  apellido_cliente, numero_telefonico,correo, comuna, direccion)"
+          [disabled]="!form.valid"
+          >Confirmar</ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

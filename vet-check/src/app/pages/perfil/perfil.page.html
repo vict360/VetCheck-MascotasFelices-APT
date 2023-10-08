@@ -1,0 +1,247 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Mi perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">perfil</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div *ngIf="veterinario">
+    <ion-grid class="ion-margin-top">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <div>
+            <ion-img class="img-perfil centrar"
+            src="{{veterinario.img_vet}}"
+            alt="">
+            </ion-img>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  
+    <h1 class="text-center">{{veterinario.nombre_vet}} {{veterinario.apellido_vet}}</h1>
+  
+    <ion-grid class="ion-margin-top">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <div>
+            <ion-card class="">
+              <p class="ion-text-center">{{veterinario.telefono_vet}}</p>
+            </ion-card>
+            <ion-card class="p-3">
+              <p class="ion-text-center">{{veterinario.correo_vet}}</p>
+            </ion-card>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  
+
+    <ion-grid class="">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <ion-item button detail="true" lines="none" (click)="setOpen(true)">
+            <ion-label>Modificar Datos Personales</ion-label>
+          </ion-item>
+          <ion-item button detail="true" lines="none" (click)="abrirContraModal(true)">
+            <ion-label>Cambiar contraseña</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+    <!-- <ion-item button detail="true" lines="none" (click)="setOpen(true)">
+      <ion-label>Modificar Datos Personales</ion-label>
+    </ion-item>
+    <ion-item button detail="true" lines="none" (click)="abrirContraModal(true)">
+      <ion-label>Cambiar contraseña</ion-label>
+    </ion-item> -->
+  </div>
+
+  <ion-modal [isOpen]="modalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Cambiar información</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-grid class="ion-margin-top">
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto">
+              <div>
+                <ion-img (click)="abrir()" class="img-perfil centrar"
+                src="{{veterinario.img_vet}}"
+                alt="">
+                </ion-img>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>  
+
+
+        <ion-grid class="ion-margin-top">
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto">
+              <form [formGroup]="formPersonal">
+                <!--Correo electronico-->
+                <ion-input #correo
+                label="Correo Electronico" minlength="4" maxlength="50"
+                labelPlacement="floating" value="{{veterinario.correo_vet}}" formControlName="email" fill="outline"></ion-input>
+                <!--Telefono-->
+                <ion-input #telefono class="ion-margin-top"
+                label="Telefono" minlength="4" maxlength="50"
+                labelPlacement="floating" value="{{veterinario.telefono_vet}}" formControlName="tel" fill="outline"></ion-input>
+              </form>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+
+
+      </ion-content>
+        <!--Footer-->
+        <ion-footer>
+          <!--Toolbar con 2 botones-->
+          <ion-toolbar>
+              <ion-title></ion-title>
+              <ion-buttons slot="start">
+                  <ion-button color="medium" (click)="setOpen(false)">Cancelar</ion-button>
+              </ion-buttons>
+              <ion-buttons *ngIf="veterinario" slot="end">
+                  <ion-button button-type="submit" (click)="modificar(correo, telefono)" [disabled]="!formPersonal.valid" [strong]="true">Confirmar</ion-button>
+              </ion-buttons>
+          </ion-toolbar>
+        </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+  <!--Cambiar contraseña-->
+  <ion-modal [isOpen]="modalContra">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Cambiar contraseña</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <!--Enviar codigo-->
+        <ion-grid>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto">
+              <ion-item>
+                <ion-input value="{{veterinario.correo_vet}}" [readonly]="true"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="auto">
+              <ion-item lines="none">
+                <p class="mensaje">
+                  <ion-icon name="mail-outline"></ion-icon>
+                  Te enviaremos un código de verificación a tu correo</p>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+
+        <ion-grid>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto">
+              <div>
+                <ion-button (click)="enviarCodigo()" shape="round" fill="outline">Enviar</ion-button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <!--Campo para verificar codigo-->
+        <div *ngIf="correoSend">
+          <ion-grid class="ion-margin-top">
+            <ion-row class="ion-justify-content-center">
+              <ion-col size="auto">
+                <form [formGroup]="formCodigo">  
+                  <!--Contraseña nueva-->
+                  <ion-input #codigo [disabled]="valid"
+                  label="Codigo de verificación"
+                  labelPlacement="floating" formControlName="codigo" fill="outline"></ion-input>
+                  <div class="error">
+                    <p *ngIf="formCodigo.get('codigo')?.hasError('required') && formCodigo.get('codigo')?.touched"> El campo debe estar completo</p>
+                  </div>
+                  <ion-grid>
+                    <ion-row class="ion-justify-content-center">
+                      <ion-col size="auto">
+                        <div>
+                          <ion-button (click)="setCodigo(codigo)" shape="round" fill="outline">confirmar</ion-button> 
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid> 
+                </form>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+           
+          <!--Si el codigo es valido, campos para contraseña-->
+          <div *ngIf="isCodigo" class="ion-margin-top">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <form [formGroup]="formContra">
+                    <!--Contraseña nueva-->
+                    <ion-input #contraNueva
+                    label="Contraseña nueva" minlength="4" maxlength="50"
+                    labelPlacement="floating" formControlName="contraNueva" type="password" fill="outline"></ion-input>
+                    <div class="error">
+                      <p *ngIf="formContra.get('contraNueva')?.hasError('minlength')">
+                        Ingresa al menos 8 carácteres
+                      </p>
+                      <div *ngIf="formContra.get('contraNueva')?.hasError('pattern')">
+                        <p>Ingresa al menos una mayuscula</p>
+                        <p>Ingresa al menos un digito</p>
+                        <p>No debe contener espacios en blanco</p>
+                      </div>
+                      <p *ngIf="formContra.get('contraNueva')?.hasError('required') && formContra.get('contraNueva')?.touched">
+                        El campo debe estar completo
+                      </p>
+                      <p *ngIf="formContra.get('contraNueva')?.hasError('maxlength')">
+                        Máximo 15 cáracteres
+                      </p>
+                    </div>
+                  </form>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div>
+
+
+      </ion-content>
+        <!--Footer-->
+        <ion-footer>
+          <!--Toolbar con 2 botones-->
+          <ion-toolbar>
+              <ion-title></ion-title>
+              <ion-buttons slot="start">
+                  <ion-button color="medium" (click)="abrirContraModal(false)">Cancelar</ion-button>
+              </ion-buttons>
+              <ion-buttons *ngIf="veterinario" slot="end">
+                  <ion-button button-type="submit" (click)="setContra()" [disabled]="!formContra.valid" [strong]="true">Confirmar</ion-button>
+              </ion-buttons>
+          </ion-toolbar>
+        </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

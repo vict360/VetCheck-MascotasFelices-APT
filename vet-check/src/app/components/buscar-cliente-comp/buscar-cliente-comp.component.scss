@@ -1,0 +1,19 @@
+.center{
+    display: grid;
+    place-items: center;
+  }
+
+
+
+.img-perfil{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatar{
+  height: 50px;
+  width: 50px;
+}

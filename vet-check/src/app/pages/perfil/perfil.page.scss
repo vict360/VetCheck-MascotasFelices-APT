@@ -1,0 +1,23 @@
+.img-perfil{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.p-3{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.error{
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-left: 15px;
+}
+
+.mensaje{
+    font-size: small;
+}

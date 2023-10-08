@@ -1,0 +1,120 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Agenda, horas libres y solicitadas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="center pad-25">
+    
+    <h1 class="text-center">Horarios solicitados</h1>
+    <div *ngIf="horariosSolicitados.length>0; else noSolicitado">
+      <div *ngFor="let sol of horariosSolicitados, let i = index">
+        <ion-card>
+          <h2 class="text-center">
+            {{sol.fecha}}
+          </h2>
+          <ion-grid>
+            <ion-row class="ion-justify-content-center">
+              <ion-col size="4">
+                <ion-card>
+                  <p class="text-center">{{sol.hora}}</p>
+                </ion-card>
+              </ion-col>
+              <ion-col size="4">
+                <ion-card>
+                  <p class="text-center">{{sol.estado}}</p>
+                </ion-card>
+              </ion-col>
+              <ion-col size="4">
+                <ion-card>
+                  <p class="text-center">{{sol.motivo}}</p>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-card>
+                  <p class="text-center">{{sol.nombre_cli}}</p>
+                </ion-card>
+              </ion-col>
+              <ion-col>
+                <ion-card>
+                  <p class="text-center">{{sol.telefono_cli}}</p>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+      </div>
+    </div>
+    <ng-template #noSolicitado>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="auto">
+            <p class="text-center">
+              <img src="../../../assets/icon/descansar.png" alt="">
+            </p>
+            <p>No cuentas con horarios solicitados</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+
+    <h2 class="text-center">Horarios disponibles</h2>
+    <div *ngIf="horarioRealDisponible.length>0; else noDisponible">
+      <div *ngFor="let hora of horarioRealDisponible, let i = index">
+        <ion-card>
+          <h1 class="text-center">
+            {{hora.fecha}}
+          </h1>
+          
+          <ion-grid>
+            <ion-row class="ion-justify-content-center">
+              <ion-col size="6">
+                <ion-card>
+                  <p class="text-center">{{hora.hora}}</p>
+                </ion-card>
+              </ion-col>
+              <ion-col size="6">
+                <ion-card>
+                  <p class="text-center">{{hora.estado}}</p>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+
+        </ion-card>
+      </div>
+    </div>
+    <ng-template #noDisponible>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="auto">
+            <p class="text-center">
+              <img src="../../../assets/icon/gato_pregunta.png" alt="">
+            </p>
+            <p>No cuentas con horarios disponibles</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+
+  </div>
+
+
+</ion-content>
+
+<!--Footer-->
+<ion-footer>
+  <!--Toolbar con 2 botones-->
+  <ion-toolbar>
+      <ion-title></ion-title>
+      <ion-buttons slot="end">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+          <ion-button (click)="cancel()">Volver</ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

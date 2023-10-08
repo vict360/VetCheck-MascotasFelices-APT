@@ -1,0 +1,171 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Crear ficha digital</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="center pad-25">
+    <form [formGroup]="formMascota">
+      <ion-list>
+        <!--Rut del dueño-->
+        <ion-item>
+          <ion-input #rut_dueno formControlName="rutDueno"
+          label="Rut del dueño" minlength="10" maxlength="10" labelPlacement="floating" placeholder="12345678-9"
+          [maskito]="cardMask"
+          [maskitoElement]="maskPredicate"></ion-input>
+        </ion-item>
+        <div class="error">
+          <p *ngIf="formMascota.get('rutDueno')?.hasError('required') && formMascota.get('rutDueno')?.touched">El campo debe estar completo </p>
+          <p *ngIf="formMascota.get('rutDueno')?.hasError('rutNoExiste')">El rut no está registrado</p>
+        </div>
+        
+        <!--Nombre de la mascota-->
+        <ion-item>
+            <ion-input #nombre_mascota formControlName="nombreMasc"
+            label="Nombre de la mascota" minlength="4" maxlength="50"
+            labelPlacement="floating" placeholder="Firulais o Mishino"></ion-input>
+        </ion-item>
+        <div class="error">
+          <p *ngIf="formMascota.get('nombreMasc')?.hasError('required') && formMascota.get('nombreMasc')?.touched">El campo debe estar completo </p>
+          <p *ngIf="formMascota.get('nombreMasc')?.hasError('minlength')">Ingrese al menos 4 carácteres</p>
+        </div>
+
+        <!--Checkbox de chip-->
+        <ion-item>
+          <ion-checkbox (ionChange)="cambiarCheckbox($event)" justify="space-between">¿La mascota tiene chip?</ion-checkbox>
+        </ion-item>
+
+        <!--Se activa si el checkbox es true-->
+        <ion-item *ngIf="checkbox">
+          <ion-input #chip_mascota formControlName="chip"
+          label="Chip de la mascota" (ionChange)="chipChange($event)" value="" minlenght="10" maxlength="15" labelPlacement="floating" placeholder="123456789XX"></ion-input>
+        </ion-item>
+        <div class="error">
+          <p *ngIf="formMascota.get('chip')?.hasError('required') && formMascota.get('chip')?.touched">El campo debe estar completo </p>
+          <p *ngIf="formMascota.get('chip')?.hasError('minlength')">Ingrese un identificador válido</p>
+        </div>
+        
+
+        <!--Sexo de la mascota-->
+        <ion-item> 
+          <ion-select #sexo_mascota formControlName="sexoMasc" label="Sexo de la mascota" okText="Seleccionar" cancelText="Cancelar"> 
+              <ion-select-option value="Hembra">Hembra</ion-select-option> 
+              <ion-select-option value="Hembra Esterilizada">Hembra Esterilizada</ion-select-option>
+              <ion-select-option value="Macho">Macho</ion-select-option>
+              <ion-select-option value="Macho Castrado">Macho Castrado</ion-select-option> 
+          </ion-select> 
+        </ion-item>
+        <div class="error">
+          <p *ngIf="formMascota.get('sexoMasc')?.hasError('required') && formMascota.get('sexoMasc')?.touched">El campo debe estar completo </p>
+        </div>
+
+        <!--Especie de la mascota-->
+        <ion-item> 
+            <ion-select #especie label="Especie" formControlName="especieMasc"> 
+                <ion-select-option value="2">Felino</ion-select-option> <ion-select-option value="1">Canino</ion-select-option> 
+            </ion-select> 
+        </ion-item>
+        <div class="error">
+          <p *ngIf="formMascota.get('especieMasc')?.hasError('required') && formMascota.get('especieMasc')?.touched">El campo debe estar completo </p>
+        </div>
+
+        <!--Raza de la mascota-->
+        <div *ngIf="especie.value==2">
+          <ion-item> 
+            <ion-select #raza label="Raza" formControlName="razaMasc" interface="action-sheet"> 
+              <div *ngFor="let fe of felinos">
+                <ion-select-option value="{{fe.id_raza}}">{{fe.nombre_raza}}</ion-select-option> 
+              </div>
+            </ion-select> 
+          </ion-item>
+          <div class="error">
+            <p *ngIf="formMascota.get('razaMasc')?.hasError('required') && formMascota.get('razaMasc')?.touched">El campo debe estar completo </p>
+          </div>
+        </div>
+
+        <div *ngIf="especie.value==1">
+          <ion-item> 
+            <ion-select #raza label="Raza" formControlName="razaMasc"> 
+              <div *ngFor="let ca of caninos">
+                <ion-select-option value="{{ca.id_raza}}">{{ca.nombre_raza}}</ion-select-option> 
+              </div>
+            </ion-select> 
+          </ion-item>
+          <div class="error">
+            <p *ngIf="formMascota.get('razaMasc')?.hasError('required') && formMascota.get('razaMasc')?.touched">El campo debe estar completo </p>
+          </div>
+        </div>
+
+        <!--Edad de la mascota-->
+        <ion-item> 
+          <ion-select #color formControlName="colorMasc" label="Color de la mascota" okText="Seleccionar" cancelText="Cancelar"> 
+              <ion-select-option value="Blanco">Blanco</ion-select-option> 
+              <ion-select-option value="Negro">Negro</ion-select-option>
+              <ion-select-option value="Gris">Gris</ion-select-option>
+              <ion-select-option value="Tricolor">Tricolor</ion-select-option>
+              <ion-select-option value="Cafe">Cafe</ion-select-option>
+          </ion-select> 
+        </ion-item>
+        <div class="error">
+          <p *ngIf="formMascota.get('colorMasc')?.hasError('required') && formMascota.get('colorMasc')?.touched">El campo debe estar completo </p>
+        </div>
+
+        <!--Estatura-->
+        <ion-item> 
+          <ion-select #estatura_mascota label="Estatura" formControlName="estaturaMasc"> 
+              <ion-select-option value="Grande">Grande</ion-select-option> 
+              <ion-select-option value="Mediano">Mediano</ion-select-option>
+              <ion-select-option value="Pequeño">Pequeño</ion-select-option> 
+          </ion-select> 
+        </ion-item>
+        <div class="error">
+          <p *ngIf="formMascota.get('estaturaMasc')?.hasError('required') && formMascota.get('estaturaMasc')?.touched">El campo debe estar completo </p>
+        </div>
+
+        <!--Edad de la mascota-->
+        <ion-item> 
+          <ion-select #edadMasc formControlName="edadMasc" label="Edad de la mascota" okText="Seleccionar" cancelText="Cancelar"> 
+              <ion-select-option value="Cachorro">Cachorro</ion-select-option> 
+              <ion-select-option value="Adulto">Adulto</ion-select-option>
+              <ion-select-option value="Senior">Senior</ion-select-option> 
+          </ion-select> 
+        </ion-item>
+        <div class="error">
+          <p *ngIf="formMascota.get('edadMasc')?.hasError('required') && formMascota.get('edadMasc')?.touched">El campo debe estar completo </p>
+        </div>
+
+        <!--Fecha de nacimiento-->
+        <ion-item> 
+            <ion-label >Fecha de nacimiento</ion-label>
+            <ion-datetime-button datetime="date" slot="end"></ion-datetime-button>
+        </ion-item>
+
+        <!--Modal para la fecha de nacimiento-->
+        <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+                <ion-datetime presentation="date" preferWheel="true" locale="es-ES" id="date" (ionChange)="fecha($event)"></ion-datetime>
+            </ng-template>
+        </ion-modal>
+
+      </ion-list>
+    </form>
+  </div>
+
+
+</ion-content>
+
+<!--Footer-->
+<ion-footer>
+  <!--Toolbar con 2 botones-->
+  <ion-toolbar>
+      <ion-title></ion-title>
+      <ion-buttons slot="start">
+          <ion-button color="medium" (click)="cancel()">Cancelar</ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+          <ion-button button-type="submit" (click)="confirm(rut_dueno, nombre_mascota, sexo_mascota, especie, estatura_mascota, edadMasc)" [disabled]="!formMascota.valid" [strong]="true">Confirmar</ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  API_KEY : "Token 4432703a71447984770c315364a7848f7d69bcc9",
+  API_URL : "https://davydvat.pythonanywhere.com/"
 };
 
 /*

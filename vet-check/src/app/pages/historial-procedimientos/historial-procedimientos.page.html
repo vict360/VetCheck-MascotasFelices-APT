@@ -1,0 +1,148 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Modifica tus procedimientos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <!--Historial-->
+    <ion-grid>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12">
+          <div *ngIf="historial_real.length>0; else sinHistorial">
+            <div class="center pad-25" *ngFor="let ficha of historial_real, let i = index">
+              <ion-card class="ion-padding">
+                <ion-card-title class="text-center">Fecha: {{ficha.fecha_hist}}</ion-card-title>
+                <ion-card-content>
+                  <ion-grid>
+                    <ion-row class="ion-justify-content-center">
+                      <ion-col *ngFor="let pro of ficha.procedimiento, let e = index" size="6">
+                        <ion-card class="ion-padding">
+                          <div *ngFor="let pros of procedimientos">
+                            <p *ngIf="pros?.url===pro" class="ion-text-center">
+                              {{pros?.nombre_proc}}
+                            </p>
+                          </div>
+                        </ion-card>
+                      </ion-col>
+                      <ion-col size="6">
+                        <ion-card class="ion-padding">
+                          <p class="ion-text-center">{{ficha?.peso_masc}} kg</p>
+                        </ion-card>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                  <ion-grid>
+                    <ion-row class="ion-justify-content-center">
+                      <ion-col size="auto">
+                        <ion-button fill="outline" shape="round" (click)="abrirModificar(ficha.id_hist, true)">
+                          Modificar
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </div>  
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ng-template #sinHistorial>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="auto">
+            <p class="text-center">
+              <ion-icon class="big-icon" name="sad-outline"></ion-icon>
+            </p>
+            <p class="text-center">No cuentas con historial registrado</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+
+
+
+  <ion-modal [isOpen]="isModificar">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Modificar Historial</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+
+        <H1 class="ion-text-center">{{historialAbierto?.fecha_hist}}</H1>
+
+        <form [formGroup]="formModHist">
+          <ion-item> 
+            <ion-select #procedimiento formControlName="procedimiento" label="Procedimiento" [multiple]="true"> 
+              <div *ngFor="let pro of procedimientos">
+                <ion-select-option value="{{pro?.url}}"
+                >{{pro?.nombre_proc}}</ion-select-option> 
+              </div>
+            </ion-select> 
+        </ion-item>
+
+        <ion-item>
+          <ion-input #peso formControlName="peso" label="Peso de la mascota" labelPlacement="floating" value="{{historialAbierto?.peso_masc}}" type="number"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input #descripcion formControlName="descripcion" label="Descripción" labelPlacement="floating" [value]="historialAbierto?.descripcion_hist || ''" type="text"></ion-input>
+        </ion-item>
+
+        <!--Checkbox de chip-->
+        <ion-item>
+           <ion-checkbox (ionChange)="cambiarCheckbox($event)" justify="space-between">¿Requiere otra atención?</ion-checkbox>
+        </ion-item>
+
+        
+        <div *ngIf="isProxAten">
+          <!--Fecha de nacimiento-->
+          <ion-item> 
+            <ion-label >Fecha proxima atención</ion-label>
+            <ion-datetime-button datetime="date" slot="end"></ion-datetime-button>
+          </ion-item>
+
+          <!--Modal para la fecha de nacimiento-->
+          <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                  <ion-datetime presentation="date" preferWheel="true" locale="es-ES" id="date" (ionChange)="fecha($event)"></ion-datetime>
+              </ng-template>
+          </ion-modal>
+        </div>
+
+        </form>
+
+      </ion-content>
+        <!--Footer-->
+        <ion-footer>
+          <!--Toolbar con 2 botones-->
+          <ion-toolbar>
+              <ion-title></ion-title>
+              <ion-buttons slot="start">
+                  <ion-button color="medium" (click)="abrirModificar(0, false)">Cancelar</ion-button>
+              </ion-buttons>
+              <ion-buttons slot="end">
+                  <ion-button button-type="submit" [strong]="true"
+                  [disabled]="!formModHist.valid"
+                  (click)="enviarDatos(procedimiento, peso, descripcion)"
+                  >Confirmar</ion-button>
+              </ion-buttons>
+          </ion-toolbar>
+        </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+
+
+
+
+</ion-content>

@@ -1,0 +1,378 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Ficha Digital de la Mascota</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="color">
+
+<div>
+  <div *ngIf="resultado; else noResultado">
+    <ion-grid>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-sm="auto">
+          <!--Datos de la mascota--> 
+          <div *ngIf="resultado">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title class="text-center">{{resultado?.nombre_masc}}</ion-card-title>
+              </ion-card-header>
+              <ion-grid>
+                <ion-row class="ion-justify-content-center">
+                  <ion-col size="auto">
+                    <div *ngIf="resultado.img_masc; else sinImagen">
+                      <img alt="{{resultado.nombre_masc}}" src="{{resultado.img_masc}}" class="img"/>
+                    </div>
+                    <ng-template #sinImagen>
+                      <div *ngIf="especie">
+                        <img *ngIf="especie.nombre_especie==='Felino'" src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Cat-512.png" alt="" class="img-masc">
+                        <img *ngIf="especie.nombre_especie==='Canino'" src="https://cdn2.iconfinder.com/data/icons/veterinary-12/512/Veterinary_Icons-16-512.png" alt="" class="img-masc">
+                      </div>
+                    </ng-template>
+                  </ion-col>
+                  <ion-col size="auto">
+                    <ion-item>
+                      <p class="text-center">{{resultado?.fecha_nac}}</p>
+                    </ion-item>
+                    <ion-item *ngIf="especie">
+                      <ion-label>{{especie?.nombre_especie}}</ion-label>
+                    </ion-item>
+                    <ion-item *ngIf="raza">
+                      <p>{{raza?.nombre_raza}}</p>
+                    </ion-item>
+                    <ion-item>
+                      <p>{{resultado?.sexo_masc}}</p>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-sm="6">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title class="text-center">Opciones</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-accordion-group>
+                
+                <ion-accordion value="first">
+                  <ion-item slot="header" color="light">
+                    <ion-label>Datos del dueño</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    <ion-card *ngIf="cliente">
+                      <ion-card-header>
+                        <ion-card-title class="text-center">Datos del cliente</ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <ion-item>
+                          <ion-icon name="person-outline" slot="start"></ion-icon>
+                          <p class="ion-justify-content-center">{{cliente.nombre_cliente}} {{cliente.apellido_cliente}}</p>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon name="id-card-outline" slot="start"></ion-icon>
+                          <p>{{cliente.rut_cliente}}</p>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon name="mail-outline" slot="start"></ion-icon>
+                          <p>{{cliente.correo_cliente}}</p>
+                        </ion-item>
+                        <ion-item>
+                          <ion-icon name="call-outline" slot="start"></ion-icon>
+                          <p>{{cliente.telefono_cliente}}</p>
+                        </ion-item>
+                      </ion-card-content>
+                    </ion-card>
+                  </div>
+                </ion-accordion>
+                
+                <ion-accordion value="second">
+                  <ion-item slot="header" color="light">
+                    <ion-label>Acciones</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+
+                    <ion-button shape="round" fill="outline" expand="full" (click)="addProcedimiento()">Agregar Procedimiento</ion-button>
+                    <ion-button shape="round" fill="outline" expand="full" class="ion-margin-top" (click)="modificarProcedimiento()">Modificar Procedimiento</ion-button>
+                    <ion-button shape="round" fill="outline" expand="full" class="ion-margin-top"  (click)="abrirModificar(true)">Modificar datos mascota</ion-button>
+
+                  </div>
+                </ion-accordion>
+                
+                <ion-accordion value="third">
+                  <ion-item slot="header" color="light">
+                    <ion-label>Historial médico de la mascota</ion-label>
+                  </ion-item>
+                  <div class="ion-padding" slot="content">
+                    
+                    <div *ngIf="resultado?.ficha.length>0; else sinHistorial">
+                      <ion-card *ngFor="let res of resultado?.ficha, let i = index ">
+                        <h2 class="ion-text-center ion-padding-top">
+                          {{res.fecha_hist}}
+                        </h2>
+                        <div>
+                          <ion-grid>
+                            <ion-row class="ion-justify-content-center">
+                              <ion-col size="auto" *ngFor="let proced of res?.procedimiento, let a = index">
+                                <ion-card class="color-blue ion-padding">
+                                  <div *ngFor="let pro of procedimientos, let i = index"> 
+                                    <p class="ion-text-center" *ngIf="pro?.url===proced">
+                                      {{pro?.nombre_proc}}
+                                    </p>
+                                  </div>
+                                </ion-card>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row class="ion-justify-content-center">
+                              <ion-col size="auto">
+                                <ion-card class="ion-padding">
+                                  <p class="ion-text-center" *ngIf="res?.proxima_aten; else sinAten">{{res?.proxima_aten}}</p>
+                                  <ng-template #sinAten>
+                                    <p class="ion-text-center">No requiere</p>
+                                  </ng-template>
+                                </ion-card>
+                              </ion-col>
+                              <ion-col size="auto">
+                                <ion-card class="ion-padding">
+                                  <p class="ion-text-center">{{res?.peso_masc}} kg</p>
+                                </ion-card>
+                              </ion-col>
+                              <ion-col size="auto">
+                                <ion-card class="ion-padding">
+                                  <p class="ion-text-center">{{rut_veterinarios[i]?.nombre_vet}} {{rut_veterinarios[i]?.apellido_vet}}</p>
+                                </ion-card>
+                              </ion-col>
+                              <ion-col size="12">
+                                <ion-card class="ion-padding">
+                                  <p class="ion-text-center">{{res?.descripcion_hist}}</p>
+                                </ion-card>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </div>
+                    
+                      </ion-card>
+                    </div>
+
+                    <ng-template #sinHistorial>
+                      <ion-card class="ion-padding">
+                        <h2 class="text-center">Sin historial registrado</h2>
+                      </ion-card>
+                    </ng-template>
+                  </div>
+                </ion-accordion>
+              </ion-accordion-group>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>  
+  </div>
+
+  <ng-template #noResultado>
+    <ion-spinner></ion-spinner>
+  </ng-template>
+
+</div>
+
+
+
+
+
+<ion-modal [isOpen]="isModMascota">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Modificar datos de la mascota</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+
+      <form [formGroup]="formModMascota">
+        <ion-list>
+          <!--Rut del dueño-->
+          <ion-input #rut_dueno formControlName="rutDuenoMod"
+          label="Rut del dueño" minlength="10" maxlength="10" labelPlacement="floating" placeholder="12345678-9"
+          fill="outline"
+          [maskito]="cardMask"
+          [maskitoElement]="maskPredicate"></ion-input>
+          <div class="error">
+            <p *ngIf="formModMascota.get('rutDuenoMod')?.hasError('required') && formModMascota.get('rutDuenoMod')?.touched">El campo debe estar completo </p>
+            <p *ngIf="formModMascota.get('rutDuenoMod')?.hasError('rutNoExiste')">El rut no está registrado</p>
+          </div>
+          
+          <!--Nombre de la mascota-->
+          <ion-input #nombre_mascota formControlName="nombreMod"
+          label="Nombre de la mascota" minlength="4" maxlength="50"
+          labelPlacement="floating" placeholder="Firulais o Mishino"
+          fill="outline"
+          ></ion-input>
+          <div class="error">
+            <p *ngIf="formModMascota.get('nombreMod')?.hasError('required') && formModMascota.get('nombreMod')?.touched">El campo debe estar completo </p>
+            <p *ngIf="formModMascota.get('nombreMod')?.hasError('minlength')">Ingrese al menos 4 carácteres</p>
+          </div>
+  
+          <div *ngIf="!resultado.chip_masc">
+            <!--Checkbox de chip-->
+            <ion-item>
+              <ion-checkbox (ionChange)="cambiarCheckbox($event)" justify="space-between">¿La mascota tiene chip?</ion-checkbox>
+            </ion-item>
+    
+            <!--Se activa si el checkbox es true-->
+            <ion-input *ngIf="checkbox" #chip_mascota formControlName="chip"
+            label="Chip de la mascota" (ionChange)="chipChange($event)" value="" minlenght="10" maxlength="15" labelPlacement="floating" placeholder="123456789XX"
+            fill="outline"></ion-input>
+            <div class="error">
+              <p *ngIf="formModMascota.get('chip')?.hasError('required') && formModMascota.get('chip')?.touched">El campo debe estar completo </p>
+              <p *ngIf="formModMascota.get('chip')?.hasError('minlength')">Ingrese un identificador válido</p>
+            </div>
+          </div>
+          <div *ngIf="resultado.chip_masc">
+            <!--Se activa si el checkbox es true-->
+            <ion-input #chip_mascota formControlName="chip"
+            label="Chip de la mascota" (ionChange)="chipChange($event)" value="" minlenght="10" maxlength="15" labelPlacement="floating" placeholder="123456789XX"
+            fill="outline"></ion-input>
+            <div class="error">
+              <p *ngIf="formModMascota.get('chip')?.hasError('required') && formModMascota.get('chip')?.touched">El campo debe estar completo </p>
+              <p *ngIf="formModMascota.get('chip')?.hasError('minlength')">Ingrese un identificador válido</p>
+            </div>
+          </div>
+          
+  
+          <!--Sexo de la mascota-->
+          <ion-item> 
+            <ion-select #sexo_mascota formControlName="sexoMod" label="Sexo de la mascota" okText="Seleccionar" cancelText="Cancelar"> 
+                <ion-select-option value="Hembra">Hembra</ion-select-option> 
+                <ion-select-option value="Hembra Esterilizada">Hembra Esterilizada</ion-select-option>
+                <ion-select-option value="Macho">Macho</ion-select-option>
+                <ion-select-option value="Macho Castrado">Macho Castrado</ion-select-option> 
+            </ion-select> 
+          </ion-item>
+          <div class="error">
+            <p *ngIf="formModMascota.get('sexoMod')?.hasError('required') && formModMascota.get('sexoMod')?.touched">El campo debe estar completo </p>
+          </div>
+  
+
+          <ion-item> 
+            <ion-select #color formControlName="especieMod" label="Especie" okText="Seleccionar" cancelText="Cancelar"> 
+                <ion-select-option value="Felino">Felino</ion-select-option> 
+                <ion-select-option value="Canino">Canino</ion-select-option>
+            </ion-select> 
+          </ion-item>
+          <div class="error">
+            <p *ngIf="formModMascota.get('especieMod')?.hasError('required') && formModMascota.get('especieMod')?.touched">El campo debe estar completo </p>
+          </div>
+  
+          <!--Raza de la mascota-->
+          <div *ngIf="formModMascota.get('especieMod')?.value=='Felino'">
+            <ion-item> 
+              <ion-select #raza label="Raza" formControlName="razaMod"> 
+                <div *ngFor="let fe of felinos">
+                  <ion-select-option value="{{fe.nombre_raza}}">{{fe.nombre_raza}}</ion-select-option> 
+                </div>
+              </ion-select> 
+            </ion-item>
+            <div class="error">
+              <p *ngIf="formModMascota.get('razaMod')?.hasError('required') && formModMascota.get('razaMod')?.touched">El campo debe estar completo </p>
+            </div>
+          </div>
+  
+          <div *ngIf="formModMascota.get('especieMod')?.value=='Canino'">
+            <ion-item> 
+              <ion-select #raza label="Raza" formControlName="razaMod"> 
+                <div *ngFor="let ca of caninos">
+                  <ion-select-option value="{{ca.nombre_raza}}">{{ca.nombre_raza}}</ion-select-option> 
+                </div>
+              </ion-select> 
+            </ion-item>
+            <div class="error">
+              <p *ngIf="formModMascota.get('razaMod')?.hasError('required') && formModMascota.get('razaMod')?.touched">El campo debe estar completo </p>
+            </div>
+          </div>
+  
+          <!--Edad de la mascota-->
+          <ion-item> 
+            <ion-select #color formControlName="colorMod" label="Color de la mascota" okText="Seleccionar" cancelText="Cancelar"> 
+                <ion-select-option value="Blanco">Blanco</ion-select-option> 
+                <ion-select-option value="Negro">Negro</ion-select-option>
+                <ion-select-option value="Gris">Gris</ion-select-option>
+                <ion-select-option value="Tricolor">Tricolor</ion-select-option>
+                <ion-select-option value="Cafe">Cafe</ion-select-option>
+            </ion-select> 
+          </ion-item>
+          <div class="error">
+            <p *ngIf="formModMascota.get('colorMod')?.hasError('required') && formModMascota.get('colorMod')?.touched">El campo debe estar completo </p>
+          </div>
+  
+          <!--Estatura-->
+          <ion-item> 
+            <ion-select #estatura_mascota label="Estatura" formControlName="estaturaMod"> 
+                <ion-select-option value="Grande">Grande</ion-select-option> 
+                <ion-select-option value="Mediano">Mediano</ion-select-option>
+                <ion-select-option value="Pequeño">Pequeño</ion-select-option> 
+            </ion-select> 
+          </ion-item>
+          <div class="error">
+            <p *ngIf="formModMascota.get('estaturaMod')?.hasError('required') && formModMascota.get('estaturaMod')?.touched">El campo debe estar completo </p>
+          </div>
+  
+          <!--Edad de la mascota-->
+          <ion-item> 
+            <ion-select #edadMasc formControlName="edadMod" label="Edad de la mascota" okText="Seleccionar" cancelText="Cancelar"> 
+                <ion-select-option value="Cachorro">Cachorro</ion-select-option> 
+                <ion-select-option value="Adulto">Adulto</ion-select-option>
+                <ion-select-option value="Senior">Senior</ion-select-option> 
+            </ion-select> 
+          </ion-item>
+          <div class="error">
+            <p *ngIf="formModMascota.get('edadMod')?.hasError('required') && formModMascota.get('edadMod')?.touched">El campo debe estar completo </p>
+          </div>
+  
+          <!--Fecha de nacimiento-->
+          <ion-item> 
+              <ion-label >Fecha de nacimiento</ion-label>
+              <ion-datetime-button datetime="date" slot="end"></ion-datetime-button>
+          </ion-item>
+  
+          <!--Modal para la fecha de nacimiento-->
+          <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                  <ion-datetime presentation="date" preferWheel="true" locale="es-ES" id="date" [value]="fechaModulo" (ionChange)="fecha($event)"></ion-datetime>
+              </ng-template>
+          </ion-modal>
+  
+        </ion-list>
+      </form>
+
+    </ion-content>
+      <!--Footer-->
+      <ion-footer>
+        <!--Toolbar con 2 botones-->
+        <ion-toolbar>
+            <ion-title></ion-title>
+            <ion-buttons slot="start">
+                <ion-button color="medium" (click)="abrirModificar(false)">Cancelar</ion-button>
+            </ion-buttons>
+            <ion-buttons slot="end">
+                <ion-button button-type="submit" [strong]="true"
+                (click)="modificarMascota()"
+                [disabled]="!formModMascota.valid"
+                >Confirmar</ion-button>
+            </ion-buttons>
+        </ion-toolbar>
+      </ion-footer>
+  </ng-template>
+</ion-modal>
+
+
+</ion-content>
+

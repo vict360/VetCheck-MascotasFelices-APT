@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Encuentre a su Cliente aquí</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="pad-25">
+    <ion-grid class="ion-margin-top">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <form [formGroup]="formRut">
+            <ion-input #rut_cliente formControlName="rut_busqueda"
+            label="Rut del cliente" minlength="10" maxlength="10" labelPlacement="floating" placeholder="12345678-9"
+            [maskito]="rutMask"
+            [maskitoElement]="maskRut" fill="outline"></ion-input>
+            <div class="error">
+              <p *ngIf="formRut.get('rut_busqueda')?.hasError('required') && formRut.get('rut_busqueda')?.touched">
+                El campo no debe estar vacio
+              </p>
+            </div>
+          </form>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="cliente">
+    <div>
+      <ion-card>
+        <ion-grid>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="auto">
+              <img class="img-perfil" src="{{cliente.img_cliente}}" alt="">
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <h2 class="text-center">{{cliente.nombre_cliente}}  {{cliente.apellido_cliente}}</h2>
+      </ion-card>
+    </div>
+
+  
+    <div *ngIf="cliente.mascotas.length>0; else sinRegistro">
+  
+      <H1 class="text-center">Mascotas</H1>
+  
+      <div *ngFor="let mas of cliente.mascotas, let i = index">
+        
+        <ion-item button (click)="abrirFicha(mas.id_masc)">
+          <ion-avatar class="avatar" slot="start" *ngIf="mas?.img_masc; else noImg">
+            <img alt="" src="{{mas.img_masc}}"/>
+          </ion-avatar>
+          <ng-template #noImg>
+            <ion-avatar *ngIf="mas?.raza_mascota===1" class="avatar" slot="start">
+              <img alt="Dibujo de un gato" src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Cat-512.png"/>
+            </ion-avatar>   
+            <ion-avatar *ngIf="mas?.raza_mascota===2" class="avatar" slot="start">
+              <img alt="Dibujo de un gato" src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Cat-512.png"/>
+            </ion-avatar>   
+          </ng-template>
+          <ion-label> {{mas.nombre_masc}} </ion-label>
+        </ion-item>
+
+      </div>
+  
+    </div>
+  </div>
+
+  <ng-template #sinRegistro>
+    <ion-card class="ion-padding">
+      <h2 class="text-center">Sin mascotas registradas</h2>
+    </ion-card>
+  </ng-template>
+
+
+</ion-content>
+
+<!--Footer-->
+<ion-footer>
+  <!--Toolbar con 2 botones-->
+  <ion-toolbar>
+      <ion-title></ion-title>
+      <ion-buttons slot="start">
+          <ion-button color="medium" (click)="cancel()">Cancelar</ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+          <ion-button button-type="submit" [disabled]="!formRut.valid" (click)="buscarCliente(rut_cliente)" [strong]="true">Confirmar</ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
