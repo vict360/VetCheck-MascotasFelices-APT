@@ -49,7 +49,6 @@ export class BuscarClienteCompComponent  implements OnInit {
   async buscarCliente(rut: IonInput){
     let a = await this.api.datosAPI("cliente/"+rut.value)
     this.cliente = await this.api.datos
-
   }
 
   abrirFicha(id: IonInput){

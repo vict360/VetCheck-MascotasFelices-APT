@@ -16,7 +16,7 @@
     <ion-grid>
       <ion-row class="ion-justify-content-center">
         <ion-col size="12" size-sm="auto">
-          <!--Datos de la mascota--> 
+           
           <div *ngIf="resultado">
             <ion-card>
               <ion-card-header>
@@ -179,7 +179,9 @@
   </div>
 
   <ng-template #noResultado>
-    <ion-spinner></ion-spinner>
+    <div class="centrar center">
+      <ion-spinner class="big-spinner"></ion-spinner>
+    </div>
   </ng-template>
 
 </div>

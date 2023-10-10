@@ -169,6 +169,7 @@ export class CrearFichaCompComponent implements OnInit{
               message: 'La mascota ha sido agregada al cliente: '+rut_dueno.value,
               duration: 2000,
               position: 'bottom',
+              color: 'success'
             });
             await toast.present();
           }, async error=>{

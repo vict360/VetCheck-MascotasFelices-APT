@@ -22,7 +22,7 @@
                 <ion-card-content>
                   <ion-grid>
                     <ion-row class="ion-justify-content-center">
-                      <ion-col *ngFor="let pro of ficha.procedimiento, let e = index" size="6">
+                      <ion-col *ngFor="let pro of ficha.procedimiento, let e = index" size="auto">
                         <ion-card class="ion-padding">
                           <div *ngFor="let pros of procedimientos">
                             <p *ngIf="pros?.url===pro" class="ion-text-center">
@@ -31,7 +31,7 @@
                           </div>
                         </ion-card>
                       </ion-col>
-                      <ion-col size="6">
+                      <ion-col size="auto">
                         <ion-card class="ion-padding">
                           <p class="ion-text-center">{{ficha?.peso_masc}} kg</p>
                         </ion-card>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
@@ -28,7 +28,7 @@ export class ApiRestService {
     return this.http.post(url, data, options);
   }
 
-  llamadaApi(url:any){
+  llamadaApi(url:any){ 
     let options = {
       headers:{'Authorization': this.token}
     }
@@ -37,8 +37,22 @@ export class ApiRestService {
         resolve(data);
         this.datos = data;
       },
-      error => {
+      async error => {
         console.log(error.status)
+        if(error.status===404){
+          const alert = await this.alertController.create({
+            cssClass: 'my-custom-class',
+            header: 'Sin registro',
+            message: 'No se ha encontrado lo que buscabas',
+            buttons: [
+              {
+                text: 'OK',
+                role: 'cancel'
+              }
+            ]
+          });
+          await alert.present();
+        }
       }
       )
     })
@@ -75,13 +89,26 @@ export class ApiRestService {
         this.datos = data;
       },
       async error => {
-        
+      
         this.err = error.status
         if(error.status===404){
           const alert = await this.alertController.create({
             cssClass: 'my-custom-class',
             header: 'Sin registro',
             message: 'No se ha encontrado lo que buscabas',
+            buttons: [
+              {
+                text: 'OK',
+                role: 'cancel'
+              }
+            ]
+          });
+          await alert.present();
+        }else{
+          const alert = await this.alertController.create({
+            cssClass: 'my-custom-class',
+            header: 'Ha habído un error',
+            message: 'Es probable que nuestros servicios no esten disponible o que se haya perdido la conexión a internet',
             buttons: [
               {
                 text: 'OK',
@@ -108,6 +135,7 @@ export class ApiRestService {
               message: 'La contraseña fue cambiada con exito',
               duration: 2000,
               position: 'bottom',
+              color : 'success'
             });
             await toast.present();
           }
@@ -116,6 +144,7 @@ export class ApiRestService {
               message: 'Los datos fueron actualizados con exito',
               duration: 2000,
               position: 'bottom',
+              color: 'success'
             });
             await toast.present();
           }
@@ -174,6 +203,7 @@ export class ApiRestService {
               message: 'Los datos fueron cargados con exito',
               duration: 2000,
               position: 'bottom',
+              color: 'success'
             });
             await toast.present();
           }

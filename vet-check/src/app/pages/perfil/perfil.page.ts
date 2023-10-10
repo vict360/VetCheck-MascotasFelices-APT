@@ -26,6 +26,8 @@ export class PerfilPage implements OnInit {
   correoSend = false;
   isCodigo = false;
   valid = false;
+  response: any
+  isSent = false;
   constructor(
     private nav : NavController,
     private api : ApiRestService,
@@ -42,7 +44,7 @@ export class PerfilPage implements OnInit {
     })
 
     this.formContra = this.fb.group({
-      contraNueva : ['', [Validators.required, Validators.minLength(8),Validators.maxLength(15), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[A-Za-z])\S{8,}$/)]],
+      contraNueva : ['', [Validators.required, Validators.minLength(6),Validators.maxLength(12), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[A-Za-z])\S{6,}$/)]],
     })
 
     this.formPersonal = this.fb.group({
@@ -116,9 +118,59 @@ export class PerfilPage implements OnInit {
     this.correoSend = false;
   }
 
+  async alertInput(){
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Se te ha enviado un código',
+      message: 'Abre tú correo e ingresa el código que te enviamos',
+      buttons: [
+        {
+          text: 'Ok',
+          role: 'confirm',
+          handler: async (codigo: any)=>{
+            if(codigo.Codigo==this.response.codigo){
+              this.isCodigo = true;
+              this.valid = true
+            }else{
+              const alert = await this.alertController.create({
+                cssClass: 'my-custom-class',
+                header: 'Código inválido',
+                message: 'Por favor, ingrese el código enviado a su correo',
+                buttons: [
+                  {
+                    text: 'OK',
+                    role: 'cancel', 
+                    handler: ()=>{
+                      this.alertInput()
+                    }
+                  }
+                ]
+              });
+              await alert.present();
+              this.isCodigo = false;
+            }
+          }
+        },{
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: ()=>{
+            this.isSent = false;
+          }
+        }],
+        inputs : [{
+          placeholder: 'Código de verificación',
+          name: 'Codigo',
+          id: 'codigo',
+        }]
+      });
+    await alert.present();
+  }
+
   //Se envia codigo a correo electronico
   async  enviarCodigo(){
-    this.api.enviarCorreo('vict.vargass@gmail.com', 'Víctor').subscribe(async(response:any)=>{
+    this.isSent = true;
+    this.api.enviarCorreo('vict.vargass@gmail.com', 'Víctor').subscribe(async(res:any)=>{
+      this.response = res
       const toast = await this.toastController.create({
         message: 'Se ha envíado el correo, revisa tú email',
         duration: 2000,
@@ -140,30 +192,8 @@ export class PerfilPage implements OnInit {
       });
       await alert.present();
     });
-    this.correoSend = true; 
-  }
-
-  //Comprobamos si el codigo es valido
-  async setCodigo(cod: IonInput){
-    let correo = await this.api.response 
-    if(cod.value===correo.codigo){
-      this.isCodigo = true;
-      this.valid = true
-    }else{
-      const alert = await this.alertController.create({
-        cssClass: 'my-custom-class',
-        header: 'Código inválido',
-        message: 'Por favor, ingrese el código enviado a su correo',
-        buttons: [
-          {
-            text: 'OK',
-            role: 'cancel'
-          }
-        ]
-      });
-      await alert.present();
-      this.isCodigo = false;
-    }
+    this.correoSend = false;
+    this.alertInput()
   }
 
   async setContra(){

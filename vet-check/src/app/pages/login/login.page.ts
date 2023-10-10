@@ -53,7 +53,7 @@ export class LoginPage implements OnInit {
   async inicioDeSesion(rut: IonInput, contra: IonInput){
     let rut_storage: any = rut.value
     this.pass = contra.value
-    //Mensajes de error:
+    //Mensajes de error:    
     const usuarioInactivo = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Cuenta suspendida',
@@ -69,7 +69,7 @@ export class LoginPage implements OnInit {
     const errorDeServidor = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Ha habído un problema',
-      message: 'Intenta ingresar tus claves de acceso más tarde',
+      message: 'Comprueba tu conexión a internet o intenta ingresar tus claves de acceso más tarde',
       buttons: [{text: 'OK', role: 'cancel'}]
     });
   
@@ -81,11 +81,11 @@ export class LoginPage implements OnInit {
     }, async error=>{              
       if(error.status==401){
         await datosIncorrectos.present();
-      }
+      }else
       if(error.status==403){
         await usuarioInactivo.present();
       }
-      else{  
+      else{          
         await errorDeServidor.present();
       }
     })

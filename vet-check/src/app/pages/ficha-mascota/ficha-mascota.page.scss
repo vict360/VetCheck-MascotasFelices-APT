@@ -71,3 +71,21 @@
     background-color: #2677A5;
     color: #ffff;
 }
+
+.centrar{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+  
+.center{
+    display: grid;
+    place-items: center;
+}
+
+.big-spinner{
+    width: 40px;
+    height: 40px;
+}
