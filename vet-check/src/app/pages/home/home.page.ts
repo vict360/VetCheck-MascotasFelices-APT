@@ -144,6 +144,9 @@ export class HomePage implements OnInit{
         }else{
           this.api.traerDatosAPI2('mascota/'+a+'/').subscribe(
             async (response: any) =>{
+            this.ultimaMascota = response
+            console.log(this.ultimaMascota);
+            
             this.pararEscaner()
             BarcodeScanner.stopScan()
             this.nav.navigateForward(`/ficha-mascota/${a}`)  
@@ -187,7 +190,7 @@ export class HomePage implements OnInit{
   }
 
   mostrarUltimaMascota(){
-    this.nav.navigateForward(`/ficha-mascota/${this.resultadoEscaneado}`)  
+    this.nav.navigateForward(`/ficha-mascota/${this.ultimaMascota?.id_masc}`)  
   }
 
   async pararEscaner(){

@@ -32,7 +32,10 @@
         <ion-grid>
           <ion-row class="ion-justify-content-center">
             <ion-col size="auto">
-              <img class="img-perfil" src="{{cliente.img_cliente}}" alt="">
+              <img *ngIf="cliente?.img_cliente; else sinImg" class="img-perfil" src="{{cliente.img_cliente}}" alt="">
+              <ng-template #sinImg>
+                <img class="img-perfil" src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="">
+              </ng-template>
             </ion-col>
           </ion-row>
         </ion-grid>

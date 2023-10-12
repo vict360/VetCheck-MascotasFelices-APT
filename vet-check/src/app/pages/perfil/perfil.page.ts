@@ -63,6 +63,8 @@ export class PerfilPage implements OnInit {
 
   async traerDatos(){
     this.veterinario = await this.api.datosAPI('veterinario/'+localStorage.getItem("rut_vet")+"/");
+    this.formPersonal.get('email')?.setValue(this.veterinario?.correo_vet)
+    this.formPersonal.get('tel')?.setValue(this.veterinario?.telefono_vet)
   }
 
   volver(){
@@ -116,6 +118,9 @@ export class PerfilPage implements OnInit {
     this.formContra.get('contraNueva')?.reset();
     this.isCodigo = false;
     this.correoSend = false;
+    if(!is){
+      this.isSent = false;
+    }
   }
 
   async alertInput(){

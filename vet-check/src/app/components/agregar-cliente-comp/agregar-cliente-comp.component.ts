@@ -112,6 +112,7 @@ export class AgregarClienteCompComponent implements OnInit{
             message: 'El cliente: '+rut.value+' fue agregado correctamente',
             duration: 2000,
             position: 'bottom',
+            color: 'success'
           });
           await toast.present();
           this.cancel();
