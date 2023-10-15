@@ -49,7 +49,7 @@ export class AgregarClienteCompComponent implements OnInit{
     mask: [
       ...Array(8).fill(/\d/),
       '-',
-      ...Array(1).fill(/\d/)
+      ...Array(1).fill(/[0-9Kk]/)
     ],
   };
 
@@ -95,7 +95,7 @@ export class AgregarClienteCompComponent implements OnInit{
         this.rutContra = rut.value
         // Guardamos todos los datos
         datos = {
-            "rut_cliente": rut.value,
+            "rut_cliente": rut.value.toString().toUpperCase(),
             "nombre_cliente": nombre.value,
             "apellido_cliente": apellido.value,
             "telefono_cliente": telefono.value, 

@@ -55,11 +55,11 @@
             <img alt="" src="{{mas.img_masc}}"/>
           </ion-avatar>
           <ng-template #noImg>
-            <ion-avatar *ngIf="mas?.especie_masc===1" class="avatar" slot="start">
-              <img alt="Dibujo de un gato" src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Cat-512.png"/>
-            </ion-avatar>   
             <ion-avatar *ngIf="mas?.especie_masc===2" class="avatar" slot="start">
               <img alt="Dibujo de un gato" src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Cat-512.png"/>
+            </ion-avatar>   
+            <ion-avatar *ngIf="mas?.especie_masc===1" class="avatar" slot="start">
+              <img alt="Dibujo de un perro" src="https://cdn2.iconfinder.com/data/icons/veterinary-12/512/Veterinary_Icons-16-512.png"/>
             </ion-avatar>   
           </ng-template>
           <ion-label> {{mas.nombre_masc}} </ion-label>

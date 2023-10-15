@@ -21,10 +21,16 @@
       <ion-row class="ion-justify-content-center">
         <ion-col size="auto">
           <div>
-            <ion-img class="img-perfil centrar"
+            <ion-img *ngIf="veterinario?.img_vet; else sinPerfil" class="img-perfil centrar"
             src="{{veterinario.img_vet}}"
             alt="">
             </ion-img>
+            <ng-template #sinPerfil>
+              <ion-img class="img-perfil centrar"
+              src="https://ionicframework.com/docs/img/demos/avatar.svg"
+              alt="">
+              </ion-img>
+            </ng-template>
           </div>
         </ion-col>
       </ion-row>
@@ -82,10 +88,16 @@
           <ion-row class="ion-justify-content-center">
             <ion-col size="auto">
               <div>
-                <ion-img (click)="abrir()" class="img-perfil centrar"
+                <ion-img *ngIf="veterinario?.img_vet; else sinImg" (click)="abrir()" class="img-perfil centrar"
                 src="{{veterinario.img_vet}}"
                 alt="">
                 </ion-img>
+                <ng-template #sinImg>
+                  <ion-img  (click)="abrir()" class="img-perfil centrar"
+                  src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                  alt="">
+                  </ion-img>
+                </ng-template>
               </div>
             </ion-col>
           </ion-row>

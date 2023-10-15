@@ -68,7 +68,7 @@ export class CrearFichaCompComponent implements OnInit{
     mask: [
       ...Array(8).fill(/\d/),
       '-',
-      ...Array(1).fill(/\d/)
+      ...Array(1).fill(/[0-9Kk]/)
     ],
   };
 
@@ -87,8 +87,12 @@ export class CrearFichaCompComponent implements OnInit{
 
   rutExistenteValidator(rutArray: string[]): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const rutValue = control.value;
+      let rutValue = control.value;
   
+      // Convertir el RUT a mayúsculas
+      rutValue = rutValue ? rutValue.toUpperCase() : '';
+
+
       if (rutValue && !rutArray.includes(rutValue)) {
         return { rutNoExiste: true };
       }
@@ -119,6 +123,8 @@ export class CrearFichaCompComponent implements OnInit{
     }
 
     async confirm(rut_dueno: IonInput, nombre_mascota: IonInput ,sexo_mascota: IonSelect, especie: IonSelect, estatura_mascota: IonSelect, edad: IonSelect) {
+
+      let rutDuenoMas: any = rut_dueno.value?.toString().toUpperCase()
 
       let datos : any;
 
@@ -155,7 +161,7 @@ export class CrearFichaCompComponent implements OnInit{
             "estatura_masc": estatura_mascota.value,
             "fecha_nac": this.fecha_nacimiento,
             "img_masc": "",
-            "rut_cliente": rut_dueno.value,
+            "rut_cliente": rutDuenoMas,
             "raza_mascota": parseInt(this.formMascota.get('razaMasc')?.value),
             "edad_masc": edad.value,
             "color_masc": this.formMascota.get('colorMasc')?.value
@@ -164,9 +170,8 @@ export class CrearFichaCompComponent implements OnInit{
           //this.api.crearMascota(datos);
           
           this.api.agregarEntidad('mascota', datos).subscribe(async (response: any)=>{
-            console.log(response);
             const toast = await this.toastController.create({
-              message: 'La mascota ha sido agregada al cliente: '+rut_dueno.value,
+              message: 'La mascota ha sido agregada al cliente: '+ rutDuenoMas,
               duration: 2000,
               position: 'bottom',
               color: 'success'

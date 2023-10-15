@@ -42,16 +42,15 @@ export class LoginPage implements OnInit {
     mask: [
       ...Array(8).fill(/\d/),
       '-',
-      ...Array(1).fill(/\d/)
+      ...Array(1).fill(/[0-9Kk]/)
     ],
   };
-  
 
   readonly maskRut: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
 
 
   async inicioDeSesion(rut: IonInput, contra: IonInput){
-    let rut_storage: any = rut.value
+    let rut_storage: any = rut.value?.toString().toUpperCase()
     this.pass = contra.value
     //Mensajes de error:    
     const usuarioInactivo = await this.alertController.create({
@@ -90,7 +89,6 @@ export class LoginPage implements OnInit {
       }
     })
   }
-
 
   async olvidada() {
     

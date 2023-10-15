@@ -34,7 +34,9 @@
             [maskito]="rutMask"
             [maskitoElement]="maskRut"
             [clearInput]="true"
-            fill="outline"></ion-input>
+            fill="outline"
+            autocapitalize="on"
+            ></ion-input>
 
             <div class="error">
               <p *ngIf="formLogin.get('rut')?.hasError('required') && formLogin.get('rut')?.touched">

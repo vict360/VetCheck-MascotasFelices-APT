@@ -35,7 +35,7 @@ export class BuscarClienteCompComponent  implements OnInit {
     mask: [
       ...Array(8).fill(/\d/),
       '-',
-      ...Array(1).fill(/\d/)
+      ...Array(1).fill(/[0-9Kk]/)
     ],
   };
 
@@ -47,7 +47,8 @@ export class BuscarClienteCompComponent  implements OnInit {
   }
 
   async buscarCliente(rut: IonInput){
-    let a = await this.api.datosAPI("cliente/"+rut.value)
+    let rutCliente: any = rut.value?.toString().toUpperCase()
+    let a = await this.api.datosAPI("cliente/"+ rutCliente)
     this.cliente = await this.api.datos
   }
 

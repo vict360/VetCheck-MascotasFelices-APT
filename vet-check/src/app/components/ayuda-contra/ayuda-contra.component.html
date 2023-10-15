@@ -7,9 +7,15 @@
 
       <form [formGroup]="formCorreo">
               <!--Enviar codigo-->
-        <ion-item>
-          <ion-input #correo label="Correo electronico" formControlName="correo" labelPlacement="floating" placeholder="Ingresa tu correo electronico" value=""></ion-input>
-        </ion-item>
+        <ion-input #correo label="Correo electronico" formControlName="correo" labelPlacement="floating" fill="outline" placeholder="Ingresa tu correo electronico" value=""></ion-input>
+        <div class="error">
+          <p *ngIf="formCorreo.get('correo')?.hasError('email')">
+            Email inválido
+          </p>
+          <p *ngIf="formCorreo.get('correo')?.hasError('required') && formCorreo.get('correo')?.touched">
+            Por favor, ingresa tú email.
+          </p>
+        </div>
         <ion-item lines="none">
           <p class="mensaje">
             <ion-icon name="mail-outline"></ion-icon>
@@ -21,47 +27,23 @@
         <ion-row class="ion-justify-content-center">
           <ion-col size="auto">
             <div>
-              <ion-button (click)="enviarCodigo(correo)" shape="round" fill="outline">Enviar</ion-button>
+              <ion-button (click)="enviarCodigo(correo)" shape="round" [disabled]="isSent || !formCorreo.valid"  [style.visibility]="isHidden" fill="outline">Enviar</ion-button>
             </div>
           </ion-col>
         </ion-row>
       </ion-grid>
 
-      <!--Campo para verificar codigo-->
-      <div *ngIf="correoSend">
-        <form [formGroup]="formCodigo">  
-          <!--Contraseña nueva-->
-          <ion-item>
-            <ion-input #codigo [disabled]="valid"
-            label="Codigo de verificación"
-            labelPlacement="floating" formControlName="codigo"></ion-input>
-        </ion-item>
-        <div class="error">
-          <p *ngIf="formCodigo.get('codigo')?.hasError('required') && formCodigo.get('codigo')?.touched"> El campo debe estar completo</p>
-        </div>
-        <ion-grid>
-          <ion-row class="ion-justify-content-center">
-            <ion-col size="auto">
-              <div>
-                <ion-button (click)="setCodigo(codigo)" shape="round" fill="outline">confirmar</ion-button> 
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid> 
-        </form>
         
-        <!--Si el codigo es valido, campos para contraseña-->
-        <div *ngIf="isCodigo" class="ion-margin-top">
+      <!--Si el codigo es valido, campos para contraseña-->
+      <div *ngIf="isCodigo" class="ion-margin-top">
           <form [formGroup]="formContra">
             <!--Contraseña nueva-->
-            <ion-item>
-                <ion-input #contraNueva
-                label="Contraseña nueva" minlength="4" maxlength="50"
-                labelPlacement="floating" formControlName="contraNueva" type="password"></ion-input>
-            </ion-item>
+            <ion-input #contraNueva
+                label="Contraseña nueva" minlength="6" maxlength="50"
+                labelPlacement="floating" formControlName="contraNueva" fill="outline" type="password"></ion-input>
             <div class="error">
               <p *ngIf="formContra.get('contraNueva')?.hasError('minlength')">
-                Ingresa al menos 8 carácteres
+                Ingresa al menos 6 carácteres
               </p>
               <div *ngIf="formContra.get('contraNueva')?.hasError('pattern')">
                 <p>Ingresa al menos una mayuscula</p>
@@ -72,11 +54,10 @@
                 El campo debe estar completo
               </p>
               <p *ngIf="formContra.get('contraNueva')?.hasError('maxlength')">
-                Máximo 15 cáracteres
+                Máximo 12 cáracteres
               </p>
             </div>
           </form>
-        </div>
       </div>
 
 
