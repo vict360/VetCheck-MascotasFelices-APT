@@ -43,7 +43,11 @@
           <ion-col>
             <ion-item button (click)="mostrarUltimaMascota()">
               <ion-avatar slot="start">
-                <img alt="Silhouette of a person's head" src="{{ultimaMascota.img_masc}}"/>
+                <img *ngIf="ultimaMascota?.img_masc; else noImgMasc" alt="Silhouette of a person's head" src="{{ultimaMascota.img_masc}}"/>
+                <ng-template #noImgMasc>
+                  <img *ngIf="ultimaMascota?.especie_masc==2" alt="dibujo de gato" src="https://cdn3.iconfinder.com/data/icons/avatars-9/145/Avatar_Cat-512.png"/>
+                  <img *ngIf="ultimaMascota?.especie_masc==1" alt="dibujo de perro" src="https://cdn2.iconfinder.com/data/icons/veterinary-12/512/Veterinary_Icons-16-512.png"/>
+                </ng-template>
               </ion-avatar>
               <ion-label> {{ultimaMascota.nombre_masc}} </ion-label>
             </ion-item>
