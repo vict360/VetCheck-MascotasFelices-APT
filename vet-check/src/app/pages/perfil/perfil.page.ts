@@ -65,6 +65,7 @@ export class PerfilPage implements OnInit {
     this.veterinario = await this.api.datosAPI('veterinario/'+localStorage.getItem("rut_vet")+"/");
     this.formPersonal.get('email')?.setValue(this.veterinario?.correo_vet)
     this.formPersonal.get('tel')?.setValue(this.veterinario?.telefono_vet)
+    this.imagen = this.veterinario?.img_vet
   }
 
   volver(){
@@ -80,6 +81,8 @@ export class PerfilPage implements OnInit {
     });
     if(image){
       this.imagen = image.base64String;
+      const base64String = 'data:image/jpeg;base64,' + image.base64String
+      this.imagen = base64String
     }else{
       this.imagen = this.veterinario.img_vet;
     }
@@ -91,7 +94,7 @@ export class PerfilPage implements OnInit {
 
   async modificar(correo: IonInput, telefono: IonInput){
     let data = {}
-    if(!this.imagen){
+    if(this.veterinario?.img_vet == this.imagen){
       data = {
         'correo_vet': correo.value,
         'telefono_vet': telefono.value

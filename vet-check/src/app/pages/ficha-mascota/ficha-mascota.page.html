@@ -134,12 +134,14 @@
                             </ion-row>
                             <ion-row class="ion-justify-content-center">
                               <ion-col size="auto">
-                                <ion-card class="ion-padding">
-                                  <p class="ion-text-center" *ngIf="res?.proxima_aten; else sinAten">{{res?.proxima_aten}}</p>
-                                  <ng-template #sinAten>
-                                    <p class="ion-text-center">No requiere</p>
-                                  </ng-template>
+                                <ion-card class="ion-padding" *ngIf="res?.proxima_aten; else sinAten">
+                                  <p class="ion-text-center">{{formatFecha(res?.proxima_aten)}}</p>
                                 </ion-card>
+                                <ng-template #sinAten>
+                                  <ion-card class="ion-padding">
+                                    <p class="ion-text-center">No requiere</p>
+                                  </ion-card>
+                                </ng-template>
                               </ion-col>
                               <ion-col size="auto">
                                 <ion-card class="ion-padding">
@@ -185,9 +187,6 @@
   </ng-template>
 
 </div>
-
-
-
 
 
 <ion-modal [isOpen]="isModMascota">

@@ -10,15 +10,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MaskitoModule } from '@maskito/angular';
 //Componentes
-import { CrearFichaCompComponent } from './components/crear-ficha-comp/crear-ficha-comp.component';
-import { AgregarClienteCompComponent } from './components/agregar-cliente-comp/agregar-cliente-comp.component';
-import { AgregarHistorialCompComponent } from './components/agregar-historial-comp/agregar-historial-comp.component';
+import { CrearFichaCompComponent } from './pages/home/components/crear-ficha-comp/crear-ficha-comp.component';
+import { AgregarClienteCompComponent } from './pages/home/components/agregar-cliente-comp/agregar-cliente-comp.component';
+import { AgregarHistorialCompComponent } from './pages/ficha-mascota/components/agregar-historial-comp/agregar-historial-comp.component';
 
-import { BuscarClienteCompComponent } from './components/buscar-cliente-comp/buscar-cliente-comp.component';
-import { AgendaCompComponent } from './components/agenda-comp/agenda-comp.component';
+import { BuscarClienteCompComponent } from './pages/home/components/buscar-cliente-comp/buscar-cliente-comp.component';
+import { AgendaCompComponent } from './pages/home/components/agenda-comp/agenda-comp.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { AyudaContraComponent } from './components/ayuda-contra/ayuda-contra.component';
+import { AyudaContraComponent } from './pages/login/components/ayuda-contra/ayuda-contra.component';
 
 
 @NgModule({

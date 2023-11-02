@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiRestService } from '../../api-rest.service';
-import { NavController, ModalController } from '@ionic/angular';
+import { NavController, ModalController, ViewWillEnter } from '@ionic/angular';
 // componentes
-import { AgregarHistorialCompComponent } from '../../components/agregar-historial-comp/agregar-historial-comp.component';
+import { AgregarHistorialCompComponent } from './components/agregar-historial-comp/agregar-historial-comp.component';
 import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import * as moment from 'moment';
 import { MaskitoOptions, MaskitoElementPredicateAsync } from '@maskito/core';
@@ -13,7 +13,7 @@ import { MaskitoOptions, MaskitoElementPredicateAsync } from '@maskito/core';
   templateUrl: './ficha-mascota.page.html',
   styleUrls: ['./ficha-mascota.page.scss'],
 })
-export class FichaMascotaPage implements OnInit {
+export class FichaMascotaPage implements OnInit, ViewWillEnter {
 
   arg:any | undefined;
   resultado: any | undefined;
@@ -32,6 +32,8 @@ export class FichaMascotaPage implements OnInit {
   caninos: any;
   fechaModulo: any;
   rut_clientes: any[]=[];
+  ficha : any []=[]
+
   constructor(
     private actRoute: ActivatedRoute,
     private api: ApiRestService,
@@ -66,6 +68,10 @@ export class FichaMascotaPage implements OnInit {
       this.rut_veterinarios.push(rut)
     })
 
+    console.log(this.resultado.ficha);
+    
+
+
     this.felinos = await this.api.traerDatosApi('felino/');
     this.caninos = await this.api.traerDatosApi('canino/');
 
@@ -83,11 +89,14 @@ export class FichaMascotaPage implements OnInit {
     })
 
     this.formModMascota.get('rutDuenoMod')?.addValidators(this.rutExistenteValidator(this.rut_clientes))
-  
   }
 
+  ionViewWillEnter(): void {
+    this.ngOnInit();
+    this.formatFecha(null)
+  }
 
-    rutExistenteValidator(rutArray: string[]): ValidatorFn {
+  rutExistenteValidator(rutArray: string[]): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const rutValue = control.value;
   
@@ -99,6 +108,13 @@ export class FichaMascotaPage implements OnInit {
     };
   }
   
+  formatFecha(date:any){
+    if(date==null){
+      return null
+    }else{
+      return moment(date).format('DD-MM-YYYY')
+    }
+  }
 
   establecerValoresForm(){
     let espe
@@ -142,7 +158,7 @@ export class FichaMascotaPage implements OnInit {
     mask: [
       ...Array(8).fill(/\d/),
       '-',
-      ...Array(1).fill(/\d/)
+      ...Array(1).fill(/[0-9Kk]/)
     ],
   };
 
@@ -160,6 +176,9 @@ export class FichaMascotaPage implements OnInit {
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
+    if(role){
+      this.ngOnInit();
+    }
   }
 
   modificarProcedimiento(){
@@ -199,7 +218,6 @@ export class FichaMascotaPage implements OnInit {
   modificarMascota(){
     
     if(!this.fecha_nacimiento){
-      console.log("fecha null o undefined");
       this.fecha_nacimiento = this.fechaModulo
     }
     
@@ -239,7 +257,8 @@ export class FichaMascotaPage implements OnInit {
     }
 
     this.api.cambiarDatos(this.resultado?.id_masc, 'mascota/', data, 2);
-    
+    this.abrirModificar(false)
+    this.ngOnInit();
 
   }
 

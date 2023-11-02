@@ -3,10 +3,10 @@ import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { ApiRestService } from '../../api-rest.service';
 // Componentes
-import { CrearFichaCompComponent } from '../../components/crear-ficha-comp/crear-ficha-comp.component';
-import { AgregarClienteCompComponent } from '../../components/agregar-cliente-comp/agregar-cliente-comp.component';
-import { BuscarClienteCompComponent } from '../../components/buscar-cliente-comp/buscar-cliente-comp.component';
-import { AgendaCompComponent } from '../../components/agenda-comp/agenda-comp.component';
+import { CrearFichaCompComponent } from './components/crear-ficha-comp/crear-ficha-comp.component';
+import { AgregarClienteCompComponent } from './components/agregar-cliente-comp/agregar-cliente-comp.component';
+import { BuscarClienteCompComponent } from './components/buscar-cliente-comp/buscar-cliente-comp.component';
+import { AgendaCompComponent } from './components/agenda-comp/agenda-comp.component';
 
 
 

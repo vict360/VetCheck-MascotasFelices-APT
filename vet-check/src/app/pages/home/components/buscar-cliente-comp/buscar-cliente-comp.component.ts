@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IonInput, ModalController, NavController } from '@ionic/angular';
-import { ApiRestService } from '../../api-rest.service';
+import { ApiRestService } from '../../../../api-rest.service';
 import { MaskitoOptions, MaskitoElementPredicateAsync } from '@maskito/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 

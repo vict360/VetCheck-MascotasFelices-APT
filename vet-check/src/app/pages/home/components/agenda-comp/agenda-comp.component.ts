@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { ApiRestService } from '../../api-rest.service';
+import { ApiRestService } from '../../../../api-rest.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-agenda-comp',
@@ -19,6 +20,7 @@ export class AgendaCompComponent  implements OnInit {
   ) { }
 
   async ngOnInit() {
+
     await this.api.traerDatosApi('horario/disponible/')
     this.horariosDisponibles = await this.api.datos
     this.horariosDisponibles.forEach(async (e:any) => {
@@ -27,6 +29,7 @@ export class AgendaCompComponent  implements OnInit {
         this.horarioRealDisponible.push(e)
       }
     });
+    
 
     await this.api.traerDatosApi("horario/ocupado/");
 
@@ -34,9 +37,12 @@ export class AgendaCompComponent  implements OnInit {
     this.horariosAgendados.forEach(async (e:any)=>{
       let rut = e.rut_vet.replace('https://davydvat.pythonanywhere.com/veterinario/','');
       if(rut===localStorage.getItem('rut_vet')+'/'){
+        
         this.horariosSolicitados.push(e)
       }
     });
+    
+    console.log(this.horariosSolicitados);
     
 
   }

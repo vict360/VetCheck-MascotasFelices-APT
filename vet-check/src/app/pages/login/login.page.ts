@@ -3,7 +3,7 @@ import { IonInput, NavController, AlertController, ModalController } from '@ioni
 import { ApiRestService } from '../../api-rest.service';
 import { MaskitoOptions, MaskitoElementPredicateAsync } from '@maskito/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AyudaContraComponent } from 'src/app/components/ayuda-contra/ayuda-contra.component';
+import { AyudaContraComponent } from 'src/app/pages/login/components/ayuda-contra/ayuda-contra.component';
 
 @Component({
   selector: 'app-login',

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { HistorialProcedimientosPageRoutingModule } from './historial-procedimientos-routing.module';
 
 import { HistorialProcedimientosPage } from './historial-procedimientos.page';
+import { ModificarHistorialComponent } from './components/modificar-historial/modificar-historial.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { HistorialProcedimientosPage } from './historial-procedimientos.page';
     HistorialProcedimientosPageRoutingModule,
     ReactiveFormsModule,
   ],
-  declarations: [HistorialProcedimientosPage]
+  declarations: [HistorialProcedimientosPage, ModificarHistorialComponent]
 })
 export class HistorialProcedimientosPageModule {}

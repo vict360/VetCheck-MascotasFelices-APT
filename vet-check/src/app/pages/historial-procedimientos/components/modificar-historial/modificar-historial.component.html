@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Modificar Historial</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+
+  <H1 class="ion-text-center">{{historial?.fecha_hist}}</H1>
+
+  <form [formGroup]="formModHist">
+    <ion-item> 
+      <ion-select #procedimiento formControlName="procedimiento" label="Procedimiento" [multiple]="true"> 
+        <div *ngFor="let pro of procedimientos">
+          <ion-select-option value="{{pro?.url}}"
+          >{{pro?.nombre_proc}}</ion-select-option> 
+        </div>
+      </ion-select> 
+  </ion-item>
+
+  <ion-item>
+    <ion-input #peso formControlName="peso" label="Peso de la mascota" labelPlacement="floating" type="number"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input #descripcion formControlName="descripcion" label="Descripción" labelPlacement="floating" type="text"></ion-input>
+  </ion-item>
+
+  <!--Checkbox de chip-->
+  <ion-item>
+     <ion-checkbox (ionChange)="cambiarCheckbox($event)" justify="space-between">¿Requiere otra atención?</ion-checkbox>
+  </ion-item>
+
+  
+  <div *ngIf="isProxAten">
+    <!--Fecha de nacimiento-->
+    <ion-item> 
+      <ion-label >Fecha proxima atención</ion-label>
+      <ion-datetime-button datetime="date" slot="end"></ion-datetime-button>
+    </ion-item>
+
+    <!--Modal para la fecha de nacimiento-->
+    <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+            <ion-datetime presentation="date" preferWheel="true" locale="es-ES" id="date" (ionChange)="fecha($event)"></ion-datetime>
+        </ng-template>
+    </ion-modal>
+  </div>
+
+  </form>
+
+</ion-content>
+  <!--Footer-->
+  <ion-footer>
+    <!--Toolbar con 2 botones-->
+    <ion-toolbar>
+        <ion-title></ion-title>
+        <ion-buttons slot="start">
+            <ion-button color="medium" (click)="cancel()">Cancelar</ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button button-type="submit" [strong]="true"
+            [disabled]="!formModHist.valid"
+            (click)="enviarDatos(procedimiento, peso, descripcion)"
+            >Confirmar</ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-footer>

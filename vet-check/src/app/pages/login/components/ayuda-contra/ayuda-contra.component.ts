@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, IonInput, ModalController, NavController, ToastController } from '@ionic/angular';
+import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { ApiRestService } from 'src/app/api-rest.service';
 
 @Component({
@@ -18,11 +19,12 @@ export class AyudaContraComponent  implements OnInit {
   response : any
   formCodigo: FormGroup;
   formContra: FormGroup;
-  formCorreo: FormGroup;
+  form: FormGroup;
   encontrado = false;
   rutVeterinarios: any;
   rut: any;
-  isHidden = '';
+  isHidden = ''
+  botonHidden = 'hidden'
   constructor(
     private api: ApiRestService,
     private fb: FormBuilder,
@@ -32,8 +34,8 @@ export class AyudaContraComponent  implements OnInit {
     private toastController :  ToastController
   ) {
 
-    this.formCorreo = this.fb.group({
-      correo: ['', [Validators.required, Validators.email]]
+    this.form = this.fb.group({
+      rut: ['', [Validators.required, Validators.minLength(9)]]
     })
 
     this.formCodigo = this.fb.group({
@@ -48,6 +50,16 @@ export class AyudaContraComponent  implements OnInit {
 
   ngOnInit() {}
 
+
+  readonly rutMask: MaskitoOptions = {
+    mask: [
+      ...Array(8).fill(/[0-9]/),
+      '-',
+      ...Array(1).fill(/[0-9Kk]/)
+    ],
+  };
+
+  readonly maskRut: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
@@ -90,7 +102,6 @@ export class AyudaContraComponent  implements OnInit {
           role: 'cancel',
           handler: ()=>{
             this.isSent = false;
-            this.isHidden = '';
           }
         }],
         inputs : [{
@@ -102,19 +113,12 @@ export class AyudaContraComponent  implements OnInit {
     await alert.present();
   }
 
-  //Se envia codigo a correo electronico
-  async enviarCodigo(correo : IonInput){
-    let vets: any = await this.api.traerDatosApi('/veterinario')
-
-    vets.forEach((e: any)=>{
-      if(e?.correo_vet==correo?.value){
-        this.rut = e?.rut_vet
-      }
-    })
-
+  async enviarCodigo(rut : IonInput){
+    let cliente: any = await this.api.traerDatosApi('veterinario/'+rut.value);    
     this.isSent = true;
-    this.isHidden = 'hidden'
-    this.api.enviarCorreo(correo.value, 'Víctor').subscribe(async(res:any)=>{
+    this.botonHidden = ''
+    this.rut = cliente?.rut_vet;
+    this.api.enviarCorreo(cliente?.correo_vet, cliente?.nombre_vet).subscribe(async(res:any)=>{
       this.response = res
       const toast = await this.toastController.create({
         message: 'Se ha envíado el correo, revisa tú email',
@@ -138,7 +142,7 @@ export class AyudaContraComponent  implements OnInit {
       await alert.present();
     });
     this.correoSend = false;
-    this.alertInput()
+    this.alertInput();
   }
 
   async setContra(){
@@ -164,7 +168,7 @@ export class AyudaContraComponent  implements OnInit {
       if(this.valid){        
         ok = true
         data = {
-          'password_vet': this.formContra.get('contraNueva')?.value
+          'password_cliente': this.formContra.get('contraNueva')?.value
         }
       }else{
       // Si las contraseñas son diferentes.
