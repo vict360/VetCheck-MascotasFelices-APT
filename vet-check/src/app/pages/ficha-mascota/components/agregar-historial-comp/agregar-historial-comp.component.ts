@@ -58,7 +58,7 @@ export class AgregarHistorialCompComponent  implements OnInit {
     this.fechaAtencion = this.fechaActual;
   }
 
-  enviarDatos(proSelec: IonSelect, peso: IonInput, descripcion: IonInput){
+  async enviarDatos(proSelec: IonSelect, peso: IonInput, descripcion: IonInput){
     
     let fechaProxAten
 
@@ -78,7 +78,7 @@ export class AgregarHistorialCompComponent  implements OnInit {
       "procedimiento": proSelec.value
     }
     this.api.subirDatos('historial/', data, 2);
-    this.cancel();
+    this.modalCtrl.dismiss('created', 'cancel')
   }
 
 }

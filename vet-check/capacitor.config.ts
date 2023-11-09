@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.madavi.vetcheck',
   appName: 'Vet Check',
   webDir: 'www',
   server: {

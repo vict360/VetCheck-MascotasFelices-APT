@@ -106,9 +106,13 @@ export class PerfilPage implements OnInit {
         'telefono_vet': telefono.value
       }
     }
-    this.api.cambiarDatos(this.rut, 'veterinario/', data, 2)
-    await this.traerDatos();
     this.setOpen(false);
+    this.api.cambiarDatos(this.rut, 'veterinario/', data, 2);
+    this.veterinario =  null;
+    this.formPersonal.get('email')?.setValue('')
+    this.formPersonal.get('tel')?.setValue('')
+    this.imagen = null
+    await this.traerDatos();
   }
 
 

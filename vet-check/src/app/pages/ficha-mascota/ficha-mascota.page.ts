@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiRestService } from '../../api-rest.service';
-import { NavController, ModalController, ViewWillEnter } from '@ionic/angular';
+import { NavController, ModalController, ViewWillEnter, ViewDidEnter } from '@ionic/angular';
 // componentes
 import { AgregarHistorialCompComponent } from './components/agregar-historial-comp/agregar-historial-comp.component';
 import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
@@ -13,7 +13,7 @@ import { MaskitoOptions, MaskitoElementPredicateAsync } from '@maskito/core';
   templateUrl: './ficha-mascota.page.html',
   styleUrls: ['./ficha-mascota.page.scss'],
 })
-export class FichaMascotaPage implements OnInit, ViewWillEnter {
+export class FichaMascotaPage implements OnInit, ViewDidEnter {
 
   arg:any | undefined;
   resultado: any | undefined;
@@ -68,10 +68,6 @@ export class FichaMascotaPage implements OnInit, ViewWillEnter {
       this.rut_veterinarios.push(rut)
     })
 
-    console.log(this.resultado.ficha);
-    
-
-
     this.felinos = await this.api.traerDatosApi('felino/');
     this.caninos = await this.api.traerDatosApi('canino/');
 
@@ -91,9 +87,8 @@ export class FichaMascotaPage implements OnInit, ViewWillEnter {
     this.formModMascota.get('rutDuenoMod')?.addValidators(this.rutExistenteValidator(this.rut_clientes))
   }
 
-  ionViewWillEnter(): void {
+  ionViewDidEnter(): void {
     this.ngOnInit();
-    this.formatFecha(null)
   }
 
   rutExistenteValidator(rutArray: string[]): ValidatorFn {
@@ -176,8 +171,8 @@ export class FichaMascotaPage implements OnInit, ViewWillEnter {
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
-    if(role){
-      this.ngOnInit();
+    if(data=='created'){
+      this.ionViewDidEnter();
     }
   }
 
@@ -215,7 +210,7 @@ export class FichaMascotaPage implements OnInit, ViewWillEnter {
     }
 
 
-  modificarMascota(){
+  async modificarMascota(){
     
     if(!this.fecha_nacimiento){
       this.fecha_nacimiento = this.fechaModulo
@@ -257,8 +252,18 @@ export class FichaMascotaPage implements OnInit, ViewWillEnter {
     }
 
     this.api.cambiarDatos(this.resultado?.id_masc, 'mascota/', data, 2);
+
+    this.resultado =  null;
+    this.especie = null
+    this.raza = null
+    this.cliente = null
+    this.procedimientos = null
+    this.rut_veterinarios = []
+    this.felinos = null
+    this.caninos = null
+    this.rut_clientes = []    
     this.abrirModificar(false)
-    this.ngOnInit();
+    await this.ngOnInit();
 
   }
 
